@@ -326,7 +326,7 @@ if __name__ == '__main__':
 
 
 
-app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SPACELAB])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SPACELAB])
 server = app.server
 
 sidebar = dbc.Nav(
