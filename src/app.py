@@ -19,7 +19,8 @@ PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('../data').resolve()
 
 litickers = ['T', 'TROW', 'IRM', 'TRTN']
-
+licapi = [10000,50000,100000]
+liter = [0.07,0.1,0.2,0.4]
 
 lidfofline = [pd.read_excel(DATA_PATH.joinpath('df{}.xlsx'.format(litickers[x])), index_col=0) for x in
               range(len(litickers))]
@@ -35,19 +36,21 @@ dftp = pd.DataFrame(list(zip(litickers, lidfofline)),
 
 # lioptionspesos = [{'label':str(option),'value':option} for option in lipesos]
 lioptionstkr = [{'label': str(option), 'value': option} for option in litickers]
+lioptionscapi = [{'label': str(option), 'value': option} for option in licapi]
+lioptionster = [{'label': str(option), 'value': option} for option in liter]
 
 carinput = dbc.Card(
     [
         dbc.CardBody([
             html.H4("SELECTOR DE TICKERS", className="card-title"),
             html.H6("INTRODUCE CAPITAL A INVERTIR:", className="card-text"),
-            dcc.Input(id='micapital', type='number', placeholder='capital inicial', min=100000, max=1000000),
+            dcc.Dropdown(id='micapital', options=lioptionscapi, value=licapi[2], multi=False),
             html.Hr(),
             html.H6("SELECCIONA TICKER ", className="card-text"),
             dcc.Dropdown(id='ticker-picker', options=lioptionstkr, value=litickers, multi=True),
             html.Hr(),
             html.H6("SELECCIONA T.E.R ", className="card-text"),
-            dcc.Input(id='miter', type='number', placeholder='capital inicial', min=0.07, max=0.2, step=0.01),
+            dcc.Dropdown(id='miter', options=lioptionster, value=liter[0], multi=False),
             html.Hr(),
             html.Button(id="boton1", n_clicks=0, children="calcular")
         ]),
@@ -71,18 +74,22 @@ app.layout = dbc.Container(
 )
 
 
+
 @app.callback(Output('caroutput', 'children'),
               Input('boton1', 'n_clicks'),
               State('ticker-picker', 'value'),
               State('micapital', 'value'),
               State('miter', 'value')
               )
+
+
 def rendimientocarteras(n, liticker, capital, ter):
-    dff = dftp[dftp.ticker.isin(liticker)]
+    dftpc = dftp.copy()
+    dff = dftpc[dftp.ticker.isin(liticker)]   
 
     listadf = list(dff['dft'])
 
-    lipesos = [1 / (len(listadf)) for x in range(len(listadf))]
+    lipesos = [1/(len(liticker)) for x in range(len(liticker))]
     epacopiota = [x * capital for x in lipesos]
 
     listadfvalfin = []
@@ -323,6 +330,5 @@ def rendimientocarteras(n, liticker, capital, ter):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
 
 
