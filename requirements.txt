@@ -1,4 +1,4 @@
-dash==2.9.2
+dash==2.9.3
 dash_bootstrap_components==1.4.1
 numpy==1.21.5
 openpyxl==3.0.10
