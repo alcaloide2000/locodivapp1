@@ -22,9 +22,9 @@ litickers = ['T', 'TROW', 'IRM', 'TRTN']
 licapi = [10000,50000,100000]
 liter = [0.07,0.1,0.2,0.4]
 
-lidfofline = [pd.read_excel(DATA_PATH.joinpath('df{}.xlsx'.format(litickers[x])), index_col=0) for x in
-              range(len(litickers))]
-
+# lidfofline = [pd.read_excel(DATA_PATH.joinpath('df{}.xlsx'.format(litickers[x])), index_col=0) for x in
+#               range(len(litickers))]
+lidfofline = [yf.Ticker(litickers[x]).history(period="3y") for x in range(len(litickers))]
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP],
                 meta_tags=[{'name': 'viewport',
